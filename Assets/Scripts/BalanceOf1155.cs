@@ -1,6 +1,6 @@
-using System.Collections;
+using Assets.Scripts;
+using DORA.Documents.Api.Extensions;
 using System.Numerics;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BalanceOf1155 : MonoBehaviour
@@ -9,20 +9,20 @@ public class BalanceOf1155 : MonoBehaviour
     async void Start()
     {
         string chain = "ethereum";
-        string network = "goerli";
-        string contract = "0x2c1867bc3026178a47a677513746dcc6822a137a";
+        string network = "mainnet";
+        string contract = ContractEnum.ERC1155.GetEnumDescription();
 #if UNITY_EDITOR
-        string account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+        string account = "0xfF7BE45B7FeC2845bCD4368c130583312C87BBca";
 #else
         string account = PlayerPrefs.GetString("Account");
 #endif
-        string tokenId = "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5";
+        string tokenId = "603563865116060560926305792899920619944097728690633647694850460245753314334";
 
         BigInteger balanceOf = await ERC1155.BalanceOf(chain, network, contract, account, tokenId);
-        print(balanceOf);
-        if(balanceOf > 1)
+        print("Balance Of ERC1155: " + balanceOf);
+        if(balanceOf > 0)
         {
-            sphere.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            sphere.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
         }
 
     }
