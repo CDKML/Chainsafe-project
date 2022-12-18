@@ -1,23 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class ImportNFTTexture : MonoBehaviour
 {
+    public string chain = "ethereum";
+    public string network = "goerli";
+    public string contract = "0xe39883043563650dc0ad64377f8aa3fb539947e5";
+    public string tokenId = "435";
+    public ContractEnum ERCType = ContractEnum.ERC721;
+
     public class Response {
         public string image;
     }
+
+    private async Task<string> GetUriAsync()
+    {
+        switch (ERCType)
+        {
+            case ContractEnum.ERC721:
+                return await ERC721.URI(chain, network, contract, tokenId);
+            case ContractEnum.ERC1155:
+                return await ERC721.URI(chain, network, contract, tokenId);
+            default:
+                Debug.LogError("Unknown ERC type");
+                return null;
+        }
+    }
+
     async void Start()
     {
-        string chain = "ethereum";
-        string network = "mainnet";
-        string contract = "0x76BE3b62873462d2142405439777e971754E8E77";
-        string tokenId = "10299";
-
-        // fetch uri from chain
-        string uri = await ERC1155.URI(chain, network, contract, tokenId);
+        string uri = await GetUriAsync();
         print("uri: " + uri);
 
         // fetch json from uri
